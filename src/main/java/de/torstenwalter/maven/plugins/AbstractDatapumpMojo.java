@@ -5,7 +5,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *	 http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,61 +23,89 @@ import org.apache.maven.plugin.MojoFailureException;
 abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 
 	/**
-	 * @parameter
+	 * Enables you to filter what is loaded during the import operation.
+	 * options: [ALL | DATA_ONLY | METADATA_ONLY]
+	 *
+	 * @parameter default-value="ALL"
 	 */
 	String content;
 
 	/**
+	 * Specifies the default location in which the import job can find the dump file set and where it should create
+	 * log and SQL files.
+	 *
 	 * @parameter
 	 * @required
 	 */
 	String directory;
 
 	/**
+	 * Specifies the names and optionally, the directory objects of the dump file set that was created by Export.
+	 *
 	 * @parameter
 	 */
 	String dumpfile;
 
 	/**
+	 * Enables you to filter the metadata that is imported by specifying objects and object types to exclude from the
+	 * import job.
+	 *
 	 * @parameter
 	 */
 	String exclude;
 
 	/**
+	 * Enables you to filter the metadata that is imported by specifying objects and object types for the current
+	 * import mode.
+	 *
 	 * @parameter
 	 */
 	String include;
 
-    /**
-     * @parameter
-     */
-    String logtime;
-
 	/**
+	 * Specifies the name, and optionally, a directory object, for the log file of the import job.
+	 *
 	 * @parameter
 	 */
 	String logfile;
 
 	/**
+	 * Specifies that messages displayed during import operations be timestamped. You can use the timestamps to figure
+	 * out the elapsed time between different phases of a Data Pump operation. Such information can be helpful in
+	 * diagnosing performance problems and estimating the timing of future similar operations.
+	 * options: [NONE | STATUS | LOGFILE | ALL]
+	 *
+	 * @parameter default-value="NONE"
+	 */
+	String logtime;
+
+	/**
+	 * Enables an import from a (source) database identified by a valid database link. The data from the source
+	 * database instance is written directly back to the connected database instance.
+	 *
 	 * @parameter
 	 */
 	String network_link;
 
 	/**
+	 * Specifies that a schema-mode import is to be performed.
+	 *
 	 * @parameter
 	 */
 	String schemas;
 
 	/**
+	 * Specifies that you want to perform a table-mode import.
+	 *
 	 * @parameter
 	 */
 	String tables;
 
-	public AbstractDatapumpMojo() {
+	AbstractDatapumpMojo() {
 		super();
 	}
 
-	protected void addCommonArguments(CommandLine commandLine)
+	void addCommonArguments(CommandLine commandLine)
 			throws MojoFailureException {
 		commandLine.addArgument("'" + getConnectionIdentifier() + "'", false);
 
@@ -103,11 +131,11 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 			commandLine.addArgument("LOGFILE=" + logfile);
 		}
 
-        if (StringUtils.isNotEmpty(logtime)) {
-            commandLine.addArgument("LOGTIME=" + logtime);
-        }
+		if (StringUtils.isNotEmpty(logtime)) {
+			commandLine.addArgument("LOGTIME=" + logtime);
+		}
 
-        if (StringUtils.isNotEmpty(network_link)) {
+		if (StringUtils.isNotEmpty(network_link)) {
 			commandLine.addArgument("NETWORK_LINK=" + network_link);
 		}
 

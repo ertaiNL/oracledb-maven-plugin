@@ -16,21 +16,21 @@
 
 package de.torstenwalter.maven.plugins;
 
-public class Credentials {
+class Credentials {
 	private String username;
 	private String password;
 
-	public Credentials(String username, String password) {
+	Credentials(String username, String password) {
 		super();
 		this.username = username;
 		this.password = password;
 	}
 
-	public String getUsername() {
+	String getUsername() {
 		return username;
 	}
 
-	public String getPassword() {
+	String getPassword() {
 		return password;
 	}
 }

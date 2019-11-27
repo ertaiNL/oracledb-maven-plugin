@@ -22,35 +22,34 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
 
-public abstract class AbstractDBMojo extends AbstractMojo {
+abstract class AbstractDBMojo extends AbstractMojo {
 
 	/**
 	 * User name for your database.
-	 * 
-	 * @parameter expression="${oracledb.username}"
+	 *
+	 * @parameter
 	 */
 	String username;
 
 	/**
 	 * Password for your database.
-	 * 
-	 * @parameter expression="${oracledb.password}"
+	 *
+	 * @parameter
 	 */
 	String password;
 
 	/**
-	 * It is also possible to specify user name and password for the database in
-	 * your settings.xml The <code>serverId</code> specified here is the
-	 * reference to the server with the same <code>id</code> in your
+	 * It is also possible to specify user name and password for the database in your settings.xml
+	 * The <code>serverId</code> specified here is the reference to the server with the same <code>id</code> in your
 	 * settings.xml
-	 * 
-	 * @parameter expression="${oracledb.serverId}"
+	 *
+	 * @parameter
 	 */
 	String serverId;
 
 	/**
 	 * The {@link Settings} object.
-	 * 
+	 *
 	 * @parameter default-value="${settings}"
 	 * @required
 	 * @readonly
@@ -59,32 +58,32 @@ public abstract class AbstractDBMojo extends AbstractMojo {
 
 	/**
 	 * Host name of your database server.
-	 * 
-	 * @parameter expression="${oracledb.hostname}" default-value="localhost"
+	 *
+	 * @parameter default-value="localhost"
 	 * @required
 	 */
 	String hostname;
 
 	/**
 	 * Port for your database server.
-	 * 
-	 * @parameter expression="${oracledb.port}" default-value="1521"
+	 *
+	 * @parameter default-value="1521"
 	 * @required
 	 */
 	int port;
 
 	/**
 	 * The serviceName of your oracle database instance.
-	 * 
-	 * @parameter expression="${oracledb.serviceName}"
+	 *
+	 * @parameter
 	 * @required
 	 */
 	String serviceName;
 
 	/**
 	 * The instanceName of your oracle database instance, commonly used in Oracle RAC databases with multiple instances.
-	 * 
-	 * @parameter expression="${oracledb.instanceName}"
+	 *
+	 * @parameter
 	 */
 	String instanceName;
 
@@ -92,37 +91,35 @@ public abstract class AbstractDBMojo extends AbstractMojo {
 	 * Specify role which should be used in the "as" clause in the connection
 	 * identifier. Possible values: SYSOPER and SYSDBA. Other values are
 	 * ignored.
-	 * 
+	 *
 	 * @parameter default-value=""
 	 */
 	String asClause;
 
-    /**
-     * Specify connection string style which should be used (<connect_identifier> can be in the form of Net Service Name or Easy Connect)
-     *
-     * @parameter expression="${oracledb.useEasyConnect}" default-value="false"
-     */
-    boolean useEasyConnect;
-	
-	
-	public AbstractDBMojo() {
+	/**
+	 * Specify connection string style which should be used ("connect_identifier" can be in the form of Net Service
+	 * Name or Easy Connect)
+	 *
+	 * @parameter default-value="false"
+	 */
+	boolean useEasyConnect;
+
+	AbstractDBMojo() {
 		super();
 	}
 
-	protected Credentials getCredentials() throws MojoFailureException {
+	Credentials getCredentials() throws MojoFailureException {
 		if (!StringUtils.isEmpty(serverId)) {
 			getLog().info("using credentials from serverId '" + serverId + "'");
 			Server server = settings.getServer(serverId);
 			if (server == null) {
-				throw new MojoFailureException("serverId '" + serverId
-						+ "' not found!");
+				throw new MojoFailureException("serverId '" + serverId + "' not found!");
 			}
 			return new Credentials(server.getUsername(), server.getPassword());
 		} else if (!StringUtils.isEmpty(username)) {
 			return new Credentials(username, password);
 		} else {
-			throw new MojoFailureException(
-					"Credentials needed. Specify either username and password or serverId");
+			throw new MojoFailureException("Credentials needed. Specify either username and password or serverId");
 		}
 	}
 
@@ -133,7 +130,7 @@ public abstract class AbstractDBMojo extends AbstractMojo {
 	 * @param credentials
 	 * @return
 	 */
-	protected String getConnectionIdentifier(Credentials credentials) {
+	String getConnectionIdentifier(Credentials credentials) {
 		StringBuilder connectionIdentifier = new StringBuilder();
 		// fist add the username
 		connectionIdentifier.append(credentials.getUsername());
@@ -158,8 +155,7 @@ public abstract class AbstractDBMojo extends AbstractMojo {
     					connectionIdentifier.append("(INSTANCE_NAME=").append(instanceName).append(")");
     				}
     					connectionIdentifier.append("))");
-		}
-		else {
+		} else {
 		    // "[//]Host[:Port]/<service_name>"
             connectionIdentifier.append("@//").append(hostname).append(":").append(port).append("/").append(serviceName);
 		}
@@ -173,11 +169,11 @@ public abstract class AbstractDBMojo extends AbstractMojo {
 		return connectionIdentifier.toString();
 	}
 
-	protected String getConnectionIdentifier() throws MojoFailureException {
+	String getConnectionIdentifier() throws MojoFailureException {
 		return getConnectionIdentifier(getCredentials());
 	}
 
-	protected String obfuscateCredentials(String string, Credentials credentials) {
+	String obfuscateCredentials(String string, Credentials credentials) {
 		return StringUtils.replaceOnce(StringUtils.replaceOnce(string,
 				credentials.getUsername(), "<username>"), credentials
 				.getPassword(), "<password>");

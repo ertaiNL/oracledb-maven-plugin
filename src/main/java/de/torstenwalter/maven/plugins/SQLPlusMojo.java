@@ -42,56 +42,53 @@ import org.codehaus.plexus.util.cli.CommandLineUtils;
  * @goal sqlplus
  */
 public class SQLPlusMojo extends AbstractDBMojo {
+
 	/**
 	 * The sqlplus command to execute. If sqlplus is not in you PATH you can
 	 * simply specify the full path to the sqlplus command here
-	 * 
-	 * @parameter expression="${oracledb.sqlplus}" default-value="sqlplus"
+	 *
+	 * @parameter default-value="sqlplus"
 	 */
-	private String sqlplus;
+	String sqlplus;
 
 	/**
 	 * These statements are executed before the statements in sqlCommand or
 	 * sqlFile. They should make sure the build fails if an error occurs.
-	 * 
+	 *
 	 * Technically speaking these statements are written to a login.sql file and
 	 * executed directly after sqlplus starts.
-	 * 
-	 * @parameter expression="${oracledb.beforeSql}" default-value=
-	 *            "WHENEVER SQLERROR EXIT FAILURE ROLLBACK;\nWHENEVER OSERROR EXIT FAILURE ROLLBACK;"
+	 *
+	 * @parameter default-value= "WHENEVER SQLERROR EXIT FAILURE ROLLBACK;\nWHENEVER OSERROR EXIT FAILURE ROLLBACK;"
 	 * @required
 	 */
-	private String beforeSql;
+	String beforeSql;
 
 	/**
 	 * Specify commands which SQL*Plus should executed.
-	 * 
-	 * @parameter expression="${oracledb.sqlCommand}" defaultValue=""
+	 *
+	 * @parameter
 	 */
-	private String sqlCommand;
+	String sqlCommand;
 
 	/**
 	 * File containing commands which SQL*Plus should execute.
-	 * 
+	 *
 	 * @parameter
 	 */
-	private File sqlFile;
+	File sqlFile;
 
 	/**
-	 * @parameter default-value="${project}"
+	 * @parameter default-value="project"
 	 * @readonly
 	 */
-	private MavenProject project;
+	MavenProject project;
 
-	
-    /**
-     * <p>
-     *   A list of arguments passed to the {@code executable}, which should be of type <code>&lt;argument&gt;</code> 
-     * </p>
-     * 
-     * @parameter
-     */
-    private List<Object> arguments;	
+	/**
+	 * A list of arguments passed to the {@code executable}, which should be of type <code>&lt;argument&gt;</code>
+	 *
+	 * @parameter
+	 */
+	List<Object> arguments;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
 		if (!StringUtils.isEmpty(sqlCommand)) {
@@ -101,8 +98,7 @@ public class SQLPlusMojo extends AbstractDBMojo {
 			try {
 				tmpSqlFile = File.createTempFile("statements-", ".sql");
 			} catch (IOException e) {
-				throw new MojoExecutionException(
-						"Could not create file for sql statements", e);
+				throw new MojoExecutionException("Could not create file for sql statements", e);
 			}
 			tmpSqlFile.deleteOnExit();
 
@@ -112,11 +108,9 @@ public class SQLPlusMojo extends AbstractDBMojo {
 				fos.flush();
 				fos.close();
 			} catch (FileNotFoundException e) {
-				throw new MojoExecutionException(
-						"Could not write sql statements to file", e);
+				throw new MojoExecutionException("Could not write sql statements to file", e);
 			} catch (IOException e) {
-				throw new MojoExecutionException(
-						"Could not write sql statements to file", e);
+				throw new MojoExecutionException("Could not write sql statements to file", e);
 			}
 
 			runScriptWithSqlPlus(tmpSqlFile, getEnvVars());
@@ -126,8 +120,7 @@ public class SQLPlusMojo extends AbstractDBMojo {
 	}
 
 	private File getPluginTempDirectory() {
-		File dir = new File(project.getBuild().getDirectory(),
-				"oracledb-maven-plugin");
+		File dir = new File(project.getBuild().getDirectory(), "oracledb-maven-plugin");
 		dir.mkdirs();
 		return dir;
 	}
@@ -138,8 +131,7 @@ public class SQLPlusMojo extends AbstractDBMojo {
 			try {
 				envVars.putAll(CommandLineUtils.getSystemEnvVars());
 			} catch (IOException e) {
-				throw new MojoExecutionException(
-						"Could not copy system environment variables.", e);
+				throw new MojoExecutionException("Could not copy system environment variables.", e);
 			}
 			envVars.put("SQLPATH", getPluginTempDirectory().getAbsolutePath());
 			File login = new File(getPluginTempDirectory(), "login.sql");
@@ -153,11 +145,9 @@ public class SQLPlusMojo extends AbstractDBMojo {
 				loginFos.flush();
 				loginFos.close();
 			} catch (FileNotFoundException e) {
-				throw new MojoExecutionException("Could not write "
-						+ login.getPath(), e);
+				throw new MojoExecutionException("Could not write " + login.getPath(), e);
 			} catch (IOException e) {
-				throw new MojoExecutionException("Could not write "
-						+ login.getPath(), e);
+				throw new MojoExecutionException("Could not write " + login.getPath(), e);
 			}
 			return envVars;
 		} else {
@@ -201,8 +191,7 @@ public class SQLPlusMojo extends AbstractDBMojo {
 		try {
 			exec.execute(commandLine, environment);
 		} catch (ExecuteException e) {
-			throw new MojoExecutionException("program exited with exitCode: "
-					+ e.getExitValue());
+			throw new MojoExecutionException("program exited with exitCode: " + e.getExitValue());
 		} catch (IOException e) {
 			throw new MojoExecutionException("Command execution failed.", e);
 		}
@@ -210,10 +199,8 @@ public class SQLPlusMojo extends AbstractDBMojo {
 
 	private void checkFileIsReadable(File file) throws MojoFailureException {
 		if (!file.exists() || !file.canRead() || !file.isFile()) {
-			throw new MojoFailureException(file.getName()
-					+ "problem reading file '" + file.getAbsolutePath() + "'");
+			throw new MojoFailureException(file.getName() + "problem reading file '" + file.getAbsolutePath() + "'");
 		}
 	}
-
 
 }

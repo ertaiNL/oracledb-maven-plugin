@@ -30,13 +30,13 @@ import org.apache.maven.plugin.MojoFailureException;
  * @goal expdp
  */
 public class ExpdpMojo extends AbstractDatapumpMojo {
+
 	/**
-	 * The expdp command to execute. Optional. If not specified, expdp will be
-	 * used.
-	 * 
-	 * @parameter expression="${oracledb.expdp}" default-value="expdp"
+	 * The expdp command to execute. Optional. If not specified, expdp will be used.
+	 *
+	 * @parameter default-value="expdp"
 	 */
-	private String expdp;
+	String expdp;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		CommandLine commandLine = new CommandLine(expdp);

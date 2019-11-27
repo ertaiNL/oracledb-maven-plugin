@@ -31,28 +31,36 @@ import org.apache.maven.plugin.MojoFailureException;
  * @goal impdp
  */
 public class ImpdpMojo extends AbstractDatapumpMojo {
-	/**
-	 * The impdp command to execute. Optional. If not specified, impdp will be
-	 * used.
-	 * 
-	 * @parameter expression="${oracledb.impdp}" default-value="impdp"
-	 */
-	private String impdp;
 
 	/**
-	 * @parameter
+	 * The impdp command to execute. Optional. If not specified, impdp will be used.
+	 *
+	 * @parameter default-value="impdp"
 	 */
-	private String remap_tablespace;
-	
-	/**
-	 * @parameter
-	 */
-    private String remap_schema;
+	String impdp;
 
-    /**
-     * @parameter
-     */
-    private String table_exists_action;
+	/**
+	 * Remaps all objects selected for import with persistent data in the source tablespace to be created in the target
+	 * tablespace.
+	 *
+	 * @parameter
+	 */
+	String remap_tablespace;
+
+	/**
+	 * Loads all objects from the source schema into a target schema.
+	 *
+	 * @parameter
+	 */
+	String remap_schema;
+
+	/**
+	 * Tells Import what to do if the table it is trying to create already exists.
+	 * options: [SKIP | APPEND | TRUNCATE | REPLACE]
+	 *
+	 * @parameter default-value="SKIP (Note that if CONTENT=DATA_ONLY is specified, the default is APPEND, not SKIP.)"
+	 */
+	String table_exists_action;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		CommandLine commandLine = new CommandLine(impdp);
