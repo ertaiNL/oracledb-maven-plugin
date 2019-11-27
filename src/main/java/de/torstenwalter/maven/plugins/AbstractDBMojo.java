@@ -29,14 +29,14 @@ public abstract class AbstractDBMojo extends AbstractMojo {
 	 * 
 	 * @parameter expression="${oracledb.username}"
 	 */
-	protected String username;
+	String username;
 
 	/**
 	 * Password for your database.
 	 * 
 	 * @parameter expression="${oracledb.password}"
 	 */
-	protected String password;
+	String password;
 
 	/**
 	 * It is also possible to specify user name and password for the database in
@@ -46,7 +46,7 @@ public abstract class AbstractDBMojo extends AbstractMojo {
 	 * 
 	 * @parameter expression="${oracledb.serverId}"
 	 */
-	protected String serverId;
+	String serverId;
 
 	/**
 	 * The {@link Settings} object.
@@ -55,7 +55,7 @@ public abstract class AbstractDBMojo extends AbstractMojo {
 	 * @required
 	 * @readonly
 	 */
-	private Settings settings;
+	Settings settings;
 
 	/**
 	 * Host name of your database server.
@@ -63,7 +63,7 @@ public abstract class AbstractDBMojo extends AbstractMojo {
 	 * @parameter expression="${oracledb.hostname}" default-value="localhost"
 	 * @required
 	 */
-	private String hostname;
+	String hostname;
 
 	/**
 	 * Port for your database server.
@@ -71,7 +71,7 @@ public abstract class AbstractDBMojo extends AbstractMojo {
 	 * @parameter expression="${oracledb.port}" default-value="1521"
 	 * @required
 	 */
-	private int port;
+	int port;
 
 	/**
 	 * The serviceName of your oracle database instance.
@@ -79,14 +79,14 @@ public abstract class AbstractDBMojo extends AbstractMojo {
 	 * @parameter expression="${oracledb.serviceName}"
 	 * @required
 	 */
-	private String serviceName;
+	String serviceName;
 
 	/**
 	 * The instanceName of your oracle database instance, commonly used in Oracle RAC databases with multiple instances.
 	 * 
 	 * @parameter expression="${oracledb.instanceName}"
 	 */
-	private String instanceName;
+	String instanceName;
 
 	/**
 	 * Specify role which should be used in the "as" clause in the connection
@@ -95,14 +95,14 @@ public abstract class AbstractDBMojo extends AbstractMojo {
 	 * 
 	 * @parameter default-value=""
 	 */
-	private String asClause;
+	String asClause;
 
     /**
      * Specify connection string style which should be used (<connect_identifier> can be in the form of Net Service Name or Easy Connect)
      *
      * @parameter expression="${oracledb.useEasyConnect}" default-value="false"
      */
-    protected boolean useEasyConnect;
+    boolean useEasyConnect;
 	
 	
 	public AbstractDBMojo() {

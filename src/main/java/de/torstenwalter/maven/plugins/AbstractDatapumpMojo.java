@@ -25,48 +25,48 @@ public abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 	/**
 	 * @parameter
 	 */
-	protected String content;
+	String content;
 
 	/**
 	 * @parameter
 	 * @required
 	 */
-	protected String directory;
+	String directory;
 
 	/**
 	 * @parameter
 	 */
-	protected String dumpfile;
+	String dumpfile;
 
 	/**
 	 * @parameter
 	 */
-	protected String exclude;
+	String exclude;
 
 	/**
 	 * @parameter
 	 */
-	protected String include;
+	String include;
 
 	/**
 	 * @parameter
 	 */
-	private String logfile;
+	String logfile;
 
 	/**
 	 * @parameter
 	 */
-	private String network_link;
+	String network_link;
 
 	/**
 	 * @parameter
 	 */
-	protected String schemas;
+	String schemas;
 
 	/**
 	 * @parameter
 	 */
-	protected String tables;
+	String tables;
 
 	public AbstractDatapumpMojo() {
 		super();
