@@ -110,6 +110,17 @@ public class AbstractDatapumpMojoTest {
     }
 
     @Test
+    public void addCommonArgumentsCheckArgumentLogtime() throws MojoFailureException {
+        CommandLine cmd = new CommandLine(EXECUTABLE);
+        DatapumpMojo mojo = createBasicMojo();
+        mojo.logtime = DATA;
+
+        mojo.addCommonArguments(cmd);
+
+        Assert.assertEquals("LOGTIME=" + DATA, cmd.getArguments()[2]);
+    }
+
+    @Test
     public void addCommonArgumentsCheckArgumentNetworkLink() throws MojoFailureException {
         CommandLine cmd = new CommandLine(EXECUTABLE);
         DatapumpMojo mojo = createBasicMojo();
@@ -152,13 +163,14 @@ public class AbstractDatapumpMojoTest {
         mojo.exclude = DATA;
         mojo.include = DATA;
         mojo.logfile = DATA;
+        mojo.logtime = DATA;
         mojo.network_link = DATA;
         mojo.schemas = DATA;
         mojo.tables = DATA;
 
         mojo.addCommonArguments(cmd);
 
-        Assert.assertEquals(10, cmd.getArguments().length);
+        Assert.assertEquals(11, cmd.getArguments().length);
     }
 
     private DatapumpMojo createBasicMojo() {
@@ -171,7 +183,7 @@ public class AbstractDatapumpMojoTest {
         return mojo;
     }
 
-    class DatapumpMojo extends AbstractDatapumpMojo {
+    static class DatapumpMojo extends AbstractDatapumpMojo {
 
         public void execute() {
             //do nothing

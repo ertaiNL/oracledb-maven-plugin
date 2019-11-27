@@ -184,7 +184,7 @@ public class AbstractDBMojoTest {
         return server;
     }
 
-    class DBMojo extends AbstractDBMojo {
+    static class DBMojo extends AbstractDBMojo {
 
         public void execute() {
             //do nothing

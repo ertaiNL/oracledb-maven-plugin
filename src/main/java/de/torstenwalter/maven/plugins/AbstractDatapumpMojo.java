@@ -20,7 +20,7 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoFailureException;
 
-public abstract class AbstractDatapumpMojo extends AbstractDBMojo {
+abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 
 	/**
 	 * @parameter
@@ -47,6 +47,11 @@ public abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 	 * @parameter
 	 */
 	String include;
+
+    /**
+     * @parameter
+     */
+    String logtime;
 
 	/**
 	 * @parameter
@@ -98,7 +103,11 @@ public abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 			commandLine.addArgument("LOGFILE=" + logfile);
 		}
 
-		if (StringUtils.isNotEmpty(network_link)) {
+        if (StringUtils.isNotEmpty(logtime)) {
+            commandLine.addArgument("LOGTIME=" + logtime);
+        }
+
+        if (StringUtils.isNotEmpty(network_link)) {
 			commandLine.addArgument("NETWORK_LINK=" + network_link);
 		}
 
