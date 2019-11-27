@@ -17,7 +17,7 @@
 package de.torstenwalter.maven.plugins;
 
 import org.apache.commons.exec.CommandLine;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoFailureException;
 
 abstract class AbstractDatapumpMojo extends AbstractDBMojo {
