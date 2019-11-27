@@ -23,6 +23,7 @@ import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -38,9 +39,21 @@ public class ExpdpMojo extends AbstractDatapumpMojo {
 	 */
 	String expdp;
 
+    /**
+     * Specifies whether to compress metadata before writing to the dump file set.
+     * options: [METADATA_ONLY | NONE]
+     *
+     * @parameter default-value="METADATA_ONLY"
+     */
+    String compression;
+
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		CommandLine commandLine = new CommandLine(expdp);
 		addCommonArguments(commandLine);
+
+        if (StringUtils.isNotEmpty(compression)) {
+            commandLine.addArgument("COMPRESSION=" + compression);
+        }
 
 		getLog().debug(
 				"Executing command line: "
