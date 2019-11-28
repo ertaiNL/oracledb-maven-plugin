@@ -1,5 +1,5 @@
 /**
- * Copyright 2012 Torsten Walter
+ * Copyright 2019 Torsten Walter, Rob Snelders
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,14 +16,8 @@
 
 package de.torstenwalter.maven.plugins;
 
-import java.io.IOException;
-
 import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.Executor;
-import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
@@ -46,18 +40,7 @@ public class ExpdpMojo extends AbstractDatapumpMojo {
 	 */
 	String compression;
 
-	public void execute() throws MojoExecutionException, MojoFailureException {
-		CommandLine commandLine = buildCommandline();
-
-		Executor exec = new DefaultExecutor();
-		exec.setStreamHandler(new PumpStreamHandler(System.out, System.err));
-		try {
-			exec.execute(commandLine);
-		} catch (IOException e) {
-			throw new MojoExecutionException("Command execution failed.", e);
-		}
-	}
-
+	@Override
 	CommandLine buildCommandline() throws MojoFailureException {
 		CommandLine commandLine = new CommandLine(expdp);
 		addCommonArguments(commandLine);
@@ -66,7 +49,6 @@ public class ExpdpMojo extends AbstractDatapumpMojo {
 			commandLine.addArgument("COMPRESSION=" + compression);
 		}
 
-		getLog().debug("Executing command line: " + obfuscateCredentials(commandLine.toString(), getCredentials()));
 		return commandLine;
 	}
 

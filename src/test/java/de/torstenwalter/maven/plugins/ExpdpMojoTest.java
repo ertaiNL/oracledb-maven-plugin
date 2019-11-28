@@ -1,3 +1,19 @@
+/**
+ * Copyright 2019 Torsten Walter, Rob Snelders
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.torstenwalter.maven.plugins;
 
 import org.apache.commons.exec.CommandLine;
@@ -18,7 +34,7 @@ public class ExpdpMojoTest {
             + SERVICE_NAME + "'";
 
     @Test
-    public void addCommonArgumentsCheckExecutable() throws MojoFailureException {
+    public void testBuildCommandlineExecutable() throws MojoFailureException {
         ExpdpMojo mojo = createBasicMojo();
         CommandLine cmd = mojo.buildCommandline();
 
@@ -26,7 +42,7 @@ public class ExpdpMojoTest {
     }
 
     @Test
-    public void addCommonArgumentsCheckFirstArgumentIsConnectionString() throws MojoFailureException {
+    public void testBuildCommandlineConnectionString() throws MojoFailureException {
         ExpdpMojo mojo = createBasicMojo();
         CommandLine cmd = mojo.buildCommandline();
 
@@ -34,7 +50,7 @@ public class ExpdpMojoTest {
     }
 
     @Test
-    public void addCommonArgumentsCheckCompression() throws MojoFailureException {
+    public void testBuildCommandlineCompression() throws MojoFailureException {
         ExpdpMojo mojo = createBasicMojo();
         mojo.compression = DATA;
         CommandLine cmd = mojo.buildCommandline();

@@ -1,11 +1,11 @@
 /**
- * Copyright 2012 Torsten Walter
+ * Copyright 2019 Torsten Walter, Rob Snelders
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *	 http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,13 +41,13 @@ public class AbstractDBMojoTest {
     private static final Credentials CREDENTIALS = new Credentials(USERNAME, PASSWORD);
 
     @Test(expected = MojoFailureException.class)
-    public void getCredentialsEmpty() throws MojoFailureException {
+    public void testGetCredentialsEmpty() throws MojoFailureException {
         DBMojo mojo = new DBMojo();
         mojo.getCredentials();
     }
 
     @Test(expected = MojoFailureException.class)
-    public void getCredentialsServerIdNoServerSettings() throws MojoFailureException {
+    public void testGetCredentialsServerIdNoServerSettings() throws MojoFailureException {
         Settings settings = new Settings();
         DBMojo mojo = new DBMojo();
         mojo.serverId = SERVER_ID;
@@ -57,7 +57,7 @@ public class AbstractDBMojoTest {
     }
 
     @Test
-    public void getCredentialsServerIdWithServerSettings() throws MojoFailureException {
+    public void testGetCredentialsServerIdWithServerSettings() throws MojoFailureException {
         Settings settings = new Settings();
         settings.addServer(createServerObject());
         DBMojo mojo = new DBMojo();
@@ -71,7 +71,7 @@ public class AbstractDBMojoTest {
     }
 
     @Test
-    public void getCredentialsCredentials() throws MojoFailureException {
+    public void testGetCredentialsCredentials() throws MojoFailureException {
         DBMojo mojo = new DBMojo();
         mojo.username = USERNAME;
         mojo.password = PASSWORD;
@@ -83,7 +83,7 @@ public class AbstractDBMojoTest {
     }
 
     @Test
-    public void getCredentialsCredentialsWithCredentialsAndSettings() throws MojoFailureException {
+    public void testGetCredentialsCredentialsWithCredentialsAndSettings() throws MojoFailureException {
         Settings settings = new Settings();
         settings.addServer(createServerObject());
         DBMojo mojo = new DBMojo();
@@ -99,7 +99,7 @@ public class AbstractDBMojoTest {
     }
 
     @Test
-    public void getConnectionIdentifierBasicNonEasyConnect() throws MojoFailureException {
+    public void testGetConnectionIdentifierBasicNonEasyConnect() throws MojoFailureException {
         DBMojo mojo = new DBMojo();
         mojo.username = USERNAME;
         mojo.hostname = HOSTNAME;
@@ -115,7 +115,7 @@ public class AbstractDBMojoTest {
     }
 
     @Test
-    public void getConnectionIdentifierAllNonEasyConnect() throws MojoFailureException {
+    public void testGetConnectionIdentifierAllNonEasyConnect() throws MojoFailureException {
         DBMojo mojo = new DBMojo();
         mojo.username = USERNAME;
         mojo.password = PASSWORD;
@@ -136,7 +136,7 @@ public class AbstractDBMojoTest {
     }
 
     @Test
-    public void getConnectionIdentifierBasicEasyConnect() throws MojoFailureException {
+    public void testGetConnectionIdentifierBasicEasyConnect() throws MojoFailureException {
         DBMojo mojo = new DBMojo();
         mojo.useEasyConnect = Boolean.TRUE;
         mojo.username = USERNAME;
@@ -150,7 +150,7 @@ public class AbstractDBMojoTest {
     }
 
     @Test
-    public void getConnectionIdentifierAllEasyConnect() throws MojoFailureException {
+    public void testGetConnectionIdentifierAllEasyConnect() throws MojoFailureException {
         DBMojo mojo = new DBMojo();
         mojo.useEasyConnect = Boolean.TRUE;
         mojo.username = USERNAME;
@@ -167,7 +167,7 @@ public class AbstractDBMojoTest {
     }
 
     @Test
-    public void obfuscateCredentials() {
+    public void testObfuscateCredentials() {
         String text = "Test " + USERNAME + " " + PASSWORD;
         DBMojo mojo = new DBMojo();
 

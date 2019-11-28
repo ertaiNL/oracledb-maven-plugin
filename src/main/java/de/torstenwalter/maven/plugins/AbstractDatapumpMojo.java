@@ -1,5 +1,5 @@
 /**
- * Copyright 2012 Torsten Walter
+ * Copyright 2019 Torsten Walter, Rob Snelders
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,9 +16,12 @@
 
 package de.torstenwalter.maven.plugins;
 
-import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+
+import java.io.IOException;
 
 abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 
@@ -104,6 +107,24 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 	AbstractDatapumpMojo() {
 		super();
 	}
+
+	public void execute() throws MojoExecutionException, MojoFailureException {
+		CommandLine commandLine = buildCommandline();
+
+		Executor exec = new DefaultExecutor();
+		exec.setStreamHandler(new PumpStreamHandler(System.out, System.err));
+
+		getLog().debug("Executing command line: " + obfuscateCredentials(commandLine.toString(), getCredentials()));
+		try {
+			exec.execute(commandLine);
+		} catch (ExecuteException e) {
+			throw new MojoExecutionException("program exited with exitCode: " + e.getExitValue(), e);
+		} catch (IOException e) {
+			throw new MojoExecutionException("Command execution failed.", e);
+		}
+	}
+
+	abstract CommandLine buildCommandline() throws MojoFailureException;
 
 	void addCommonArguments(CommandLine commandLine)
 			throws MojoFailureException {

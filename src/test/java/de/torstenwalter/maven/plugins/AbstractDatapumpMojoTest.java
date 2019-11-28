@@ -1,11 +1,11 @@
 /**
- * Copyright 2012 Torsten Walter
+ * Copyright 2019 Torsten Walter, Rob Snelders
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *	 http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,7 +23,6 @@ import org.junit.Test;
 
 public class AbstractDatapumpMojoTest {
 
-    private static final String EXECUTABLE = "Test.exe";
     private static final String USERNAME = "username";
     private static final String HOSTNAME = "localhost";
     private static final Integer PORT = 443;
@@ -34,128 +33,116 @@ public class AbstractDatapumpMojoTest {
             + SERVICE_NAME + "'";
 
     @Test
-    public void addCommonArgumentsCheckFirstArgumentIsConnectionString() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsConnectionString() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals(CONNECTION_STRING, cmd.getArguments()[0]);
     }
 
     @Test
-    public void addCommonArgumentsCheckArgumentContent() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsContent() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
         mojo.content = DATA;
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("CONTENT=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
-    public void addCommonArgumentsCheckArgumentDirectory() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsDirectory() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
         mojo.directory = DATA;
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("DIRECTORY=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
-    public void addCommonArgumentsCheckArgumentDumpfile() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsDumpfile() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
         mojo.dumpfile = DATA;
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("DUMPFILE=" + DATA, cmd.getArguments()[2]);
     }
 
     @Test
-    public void addCommonArgumentsCheckArgumentExclude() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsExclude() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
         mojo.exclude = DATA;
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("EXCLUDE=" + DATA, cmd.getArguments()[2]);
     }
 
     @Test
-    public void addCommonArgumentsCheckArgumentInclude() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsInclude() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
         mojo.include = DATA;
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("INCLUDE=" + DATA, cmd.getArguments()[2]);
     }
 
     @Test
-    public void addCommonArgumentsCheckArgumentLogfile() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsLogfile() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
         mojo.logfile = DATA;
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("LOGFILE=" + DATA, cmd.getArguments()[2]);
     }
 
     @Test
-    public void addCommonArgumentsCheckArgumentLogtime() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsLogtime() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
         mojo.logtime = DATA;
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("LOGTIME=" + DATA, cmd.getArguments()[2]);
     }
 
     @Test
-    public void addCommonArgumentsCheckArgumentNetworkLink() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsNetworkLink() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
         mojo.network_link = DATA;
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("NETWORK_LINK=" + DATA, cmd.getArguments()[2]);
     }
 
     @Test
-    public void addCommonArgumentsCheckArgumentSchemas() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsSchemas() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
         mojo.schemas = DATA;
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("SCHEMAS=" + DATA, cmd.getArguments()[2]);
     }
 
     @Test
-    public void addCommonArgumentsCheckArgumentTables() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsTables() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
         mojo.tables = DATA;
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("TABLES=" + DATA, cmd.getArguments()[2]);
     }
 
     @Test
-    public void addCommonArgumentsCheckArgumentAmount() throws MojoFailureException {
-        CommandLine cmd = new CommandLine(EXECUTABLE);
+    public void testAddCommonArgumentsAmount() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
         mojo.content = DATA;
         mojo.directory = DATA;
@@ -168,7 +155,7 @@ public class AbstractDatapumpMojoTest {
         mojo.schemas = DATA;
         mojo.tables = DATA;
 
-        mojo.addCommonArguments(cmd);
+        CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals(11, cmd.getArguments().length);
     }
@@ -185,8 +172,11 @@ public class AbstractDatapumpMojoTest {
 
     static class DatapumpMojo extends AbstractDatapumpMojo {
 
-        public void execute() {
-            //do nothing
+        CommandLine buildCommandline() throws MojoFailureException {
+            CommandLine commandLine = new CommandLine("test");
+            addCommonArguments(commandLine);
+
+            return commandLine;
         }
     }
 }
