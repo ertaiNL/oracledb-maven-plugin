@@ -20,7 +20,6 @@ import java.io.IOException;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.lang3.StringUtils;
@@ -63,13 +62,25 @@ public class ImpdpMojo extends AbstractDatapumpMojo {
 	String table_exists_action;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		CommandLine commandLine = buildCommandline();
+
+		Executor exec = new DefaultExecutor();
+		exec.setStreamHandler(new PumpStreamHandler(System.out, System.err));
+		try {
+			exec.execute(commandLine);
+		} catch (IOException e) {
+			throw new MojoExecutionException("Command execution failed.", e);
+		}
+	}
+
+	CommandLine buildCommandline() throws MojoFailureException {
 		CommandLine commandLine = new CommandLine(impdp);
 		addCommonArguments(commandLine);
 
 		if (StringUtils.isNotEmpty(remap_tablespace)) {
 			commandLine.addArgument("REMAP_TABLESPACE=" + remap_tablespace);
 		}
-		
+
 		if (StringUtils.isNotEmpty(remap_schema)) {
 			commandLine.addArgument("REMAP_SCHEMA=" + remap_schema);
 		}
@@ -78,20 +89,8 @@ public class ImpdpMojo extends AbstractDatapumpMojo {
 			commandLine.addArgument("TABLE_EXISTS_ACTION=" + table_exists_action);
 		}
 
-		getLog().info(
-				"Executing command line: "
-						+ obfuscateCredentials(commandLine.toString(),
-								getCredentials()));
-
-		Executor exec = new DefaultExecutor();
-		exec.setStreamHandler(new PumpStreamHandler(System.out, System.err));
-		try {
-			exec.execute(commandLine);
-		} catch (ExecuteException e) {
-			throw new MojoExecutionException("Command execution failed.", e);
-		} catch (IOException e) {
-			throw new MojoExecutionException("Command execution failed.", e);
-		}
+		getLog().info("Executing command line: " + obfuscateCredentials(commandLine.toString(), getCredentials()));
+		return commandLine;
 	}
 
 }
