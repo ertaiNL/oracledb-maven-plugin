@@ -58,6 +58,15 @@ public class ExpdpMojoTest {
         Assert.assertEquals("COMPRESSION=" + DATA, cmd.getArguments()[2]);
     }
 
+    @Test
+    public void testBuildCommandlineReuseDumpFiles() throws MojoFailureException {
+        ExpdpMojo mojo = createBasicMojo();
+        mojo.reuse_dump_files = true;
+        CommandLine cmd = mojo.buildCommandline();
+
+        Assert.assertEquals("REUSE_DUMPFILES=YES", cmd.getArguments()[2]);
+    }
+
     private ExpdpMojo createBasicMojo() {
         ExpdpMojo mojo = new ExpdpMojo();
         mojo.useEasyConnect = Boolean.TRUE;

@@ -99,6 +99,7 @@ abstract class AbstractDBMojo extends AbstractMojo {
 	/**
 	 * Specify connection string style which should be used ("connect_identifier" can be in the form of Net Service
 	 * Name or Easy Connect)
+	 * options: [true | false]
 	 *
 	 * @parameter default-value="false"
 	 */

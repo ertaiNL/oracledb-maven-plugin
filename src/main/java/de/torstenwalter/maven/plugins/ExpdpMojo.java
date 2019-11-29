@@ -40,6 +40,14 @@ public class ExpdpMojo extends AbstractDatapumpMojo {
 	 */
 	String compression;
 
+	/**
+	 * Overwrite destination dump file if it exists
+	 * options: [true | false]
+	 *
+	 * @parameter default-value="false"
+	 */
+	boolean reuse_dump_files;
+
 	@Override
 	CommandLine buildCommandline() throws MojoFailureException {
 		CommandLine commandLine = new CommandLine(expdp);
@@ -47,6 +55,10 @@ public class ExpdpMojo extends AbstractDatapumpMojo {
 
 		if (StringUtils.isNotEmpty(compression)) {
 			commandLine.addArgument("COMPRESSION=" + compression);
+		}
+
+		if (reuse_dump_files) {
+			commandLine.addArgument("REUSE_DUMPFILES=YES");
 		}
 
 		return commandLine;
