@@ -91,6 +91,24 @@ public class SQLPlusMojo extends AbstractDBMojo {
 	List<Object> arguments;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+    	File file = getFile();
+    	if (file != null) {
+    		CommandLine cmd = buildCommandline(file);
+
+			Executor exec = new DefaultExecutor();
+			exec.setWorkingDirectory(file.getParentFile());
+			exec.setStreamHandler(new PumpStreamHandler(System.out, System.err));
+			try {
+				exec.execute(cmd, getEnvVars());
+			} catch (ExecuteException e) {
+				throw new MojoExecutionException("program exited with exitCode: " + e.getExitValue());
+			} catch (IOException e) {
+				throw new MojoExecutionException("Command execution failed.", e);
+			}
+		}
+	}
+
+	File getFile() throws MojoExecutionException {
 		if (!StringUtils.isEmpty(sqlCommand)) {
 			// write statements to temporary file which can be passed to
 			// sqlplus
@@ -112,10 +130,9 @@ public class SQLPlusMojo extends AbstractDBMojo {
 			} catch (IOException e) {
 				throw new MojoExecutionException("Could not write sql statements to file", e);
 			}
-
-			runScriptWithSqlPlus(tmpSqlFile, getEnvVars());
-		} else if (sqlFile != null) {
-			runScriptWithSqlPlus(sqlFile, getEnvVars());
+			return tmpSqlFile;
+		} else {
+			return sqlFile;
 		}
 	}
 
@@ -125,7 +142,7 @@ public class SQLPlusMojo extends AbstractDBMojo {
 		return dir;
 	}
 
-	private Map getEnvVars() throws MojoExecutionException {
+	Map getEnvVars() throws MojoExecutionException {
 		if (beforeSql != null) {
 			Map envVars = new HashMap();
 			try {
@@ -135,7 +152,6 @@ public class SQLPlusMojo extends AbstractDBMojo {
 			}
 			envVars.put("SQLPATH", getPluginTempDirectory().getAbsolutePath());
 			File login = new File(getPluginTempDirectory(), "login.sql");
-			// login.deleteOnExit();
 			try {
 				login.createNewFile();
 				FileOutputStream loginFos;
@@ -156,7 +172,7 @@ public class SQLPlusMojo extends AbstractDBMojo {
 
 	}
 
-	private void runScriptWithSqlPlus(File file, Map environment)
+	CommandLine buildCommandline(File file)
 			throws MojoExecutionException, MojoFailureException {
 		checkFileIsReadable(file);
 
@@ -185,16 +201,7 @@ public class SQLPlusMojo extends AbstractDBMojo {
 						+ obfuscateCredentials(commandLine.toString(),
 								getCredentials()));
 
-		Executor exec = new DefaultExecutor();
-		exec.setWorkingDirectory(file.getParentFile());
-		exec.setStreamHandler(new PumpStreamHandler(System.out, System.err));
-		try {
-			exec.execute(commandLine, environment);
-		} catch (ExecuteException e) {
-			throw new MojoExecutionException("program exited with exitCode: " + e.getExitValue());
-		} catch (IOException e) {
-			throw new MojoExecutionException("Command execution failed.", e);
-		}
+		return commandLine;
 	}
 
 	private void checkFileIsReadable(File file) throws MojoFailureException {
