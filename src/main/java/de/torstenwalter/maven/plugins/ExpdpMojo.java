@@ -34,16 +34,18 @@ public class ExpdpMojo extends AbstractDatapumpMojo {
 	/**
 	 * Specifies whether to compress metadata before writing to the dump file set.
 	 * options: [METADATA_ONLY | NONE]
+	 * oracle-default: METADATA_ONLY
 	 *
-	 * @parameter default-value="METADATA_ONLY"
+	 * @parameter
 	 */
 	String compression;
 
 	/**
 	 * Overwrite destination dump file if it exists
 	 * options: [true | false]
+	 * default: false
 	 *
-	 * @parameter default-value="false"
+	 * @parameter
 	 */
 	boolean reuse_dump_files;
 

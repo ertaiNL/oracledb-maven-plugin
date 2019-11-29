@@ -49,8 +49,9 @@ public class ImpdpMojo extends AbstractDatapumpMojo {
 	/**
 	 * Tells Import what to do if the table it is trying to create already exists.
 	 * options: [SKIP | APPEND | TRUNCATE | REPLACE]
+	 * oracle-default: SKIP (Note that if CONTENT=DATA_ONLY is specified, the default is APPEND, not SKIP.)
 	 *
-	 * @parameter default-value="SKIP (Note that if CONTENT=DATA_ONLY is specified, the default is APPEND, not SKIP.)"
+	 * @parameter
 	 */
 	String table_exists_action;
 

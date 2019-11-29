@@ -16,10 +16,7 @@
 
 package de.torstenwalter.maven.plugins;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +30,9 @@ import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Executes scripts or code snippet using SQL*Plus command line utility
@@ -78,17 +76,11 @@ public class SQLPlusMojo extends AbstractDBMojo {
 	File sqlFile;
 
 	/**
-	 * @parameter default-value="project"
-	 * @readonly
-	 */
-	MavenProject project;
-
-	/**
 	 * A list of arguments passed to the {@code executable}, which should be of type <code>&lt;argument&gt;</code>
 	 *
 	 * @parameter
 	 */
-	List<Object> arguments;
+	List<String> arguments;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
     	File file = getFile();
@@ -97,11 +89,11 @@ public class SQLPlusMojo extends AbstractDBMojo {
 
 			Executor exec = new DefaultExecutor();
 			exec.setWorkingDirectory(file.getParentFile());
-			exec.setStreamHandler(new PumpStreamHandler(System.out, System.err));
+			exec.setStreamHandler(new PumpStreamHandler(new InfoLogOutputStream(), new ErrorLogOutputStream()));
 			try {
 				exec.execute(cmd, getEnvVars());
 			} catch (ExecuteException e) {
-				throw new MojoExecutionException("program exited with exitCode: " + e.getExitValue());
+				throw new MojoExecutionException("program exited with exitCode: " + e.getExitValue(), e);
 			} catch (IOException e) {
 				throw new MojoExecutionException("Command execution failed.", e);
 			}
@@ -110,61 +102,41 @@ public class SQLPlusMojo extends AbstractDBMojo {
 
 	File getFile() throws MojoExecutionException {
 		if (!StringUtils.isEmpty(sqlCommand)) {
-			// write statements to temporary file which can be passed to
-			// sqlplus
-			File tmpSqlFile;
-			try {
-				tmpSqlFile = File.createTempFile("statements-", ".sql");
-			} catch (IOException e) {
-				throw new MojoExecutionException("Could not create file for sql statements", e);
-			}
-			tmpSqlFile.deleteOnExit();
-
-			try {
-				FileOutputStream fos = new FileOutputStream(tmpSqlFile);
-				fos.write(sqlCommand.getBytes());
-				fos.flush();
-				fos.close();
-			} catch (FileNotFoundException e) {
-				throw new MojoExecutionException("Could not write sql statements to file", e);
-			} catch (IOException e) {
-				throw new MojoExecutionException("Could not write sql statements to file", e);
-			}
-			return tmpSqlFile;
+			return printToTempFile(sqlCommand);
 		} else {
 			return sqlFile;
 		}
 	}
 
-	private File getPluginTempDirectory() {
-		File dir = new File(project.getBuild().getDirectory(), "oracledb-maven-plugin");
-		dir.mkdirs();
-		return dir;
+	CommandLine buildCommandline(File file) throws MojoFailureException {
+		CommandLine commandLine = new CommandLine(sqlplus);
+		// logon only once, else it would prompt for credentials after failure
+		commandLine.addArgument("-L");
+		StringTokenizer stringTokenizer = new StringTokenizer(getConnectionIdentifier());
+		while (stringTokenizer.hasMoreTokens()) {
+			commandLine.addArgument(stringTokenizer.nextToken());
+		}
+		commandLine.addArgument("@" + file.getName());
+		addSqlArguments(commandLine);
+		
+		getLog().info("Executing command line: " + obfuscateCredentials(commandLine, getCredentials()));
+
+		return commandLine;
+	}
+
+	private void addSqlArguments(CommandLine commandLine) {
+		if (arguments != null) {
+			for (String argument : arguments) {
+				commandLine.addArgument(argument);
+			}
+		}
 	}
 
 	Map getEnvVars() throws MojoExecutionException {
 		if (beforeSql != null) {
-			Map envVars = new HashMap();
-			try {
-				envVars.putAll(CommandLineUtils.getSystemEnvVars());
-			} catch (IOException e) {
-				throw new MojoExecutionException("Could not copy system environment variables.", e);
-			}
-			envVars.put("SQLPATH", getPluginTempDirectory().getAbsolutePath());
-			File login = new File(getPluginTempDirectory(), "login.sql");
-			try {
-				login.createNewFile();
-				FileOutputStream loginFos;
-				loginFos = new FileOutputStream(login);
-				loginFos.write(beforeSql.getBytes());
-
-				loginFos.flush();
-				loginFos.close();
-			} catch (FileNotFoundException e) {
-				throw new MojoExecutionException("Could not write " + login.getPath(), e);
-			} catch (IOException e) {
-				throw new MojoExecutionException("Could not write " + login.getPath(), e);
-			}
+			Map<Object, Object> envVars = copySystemEnvVars();
+			File tmpSqlFile = printToTempFile(beforeSql);
+			envVars.put("SQLPATH", tmpSqlFile.getParent());
 			return envVars;
 		} else {
 			return null;
@@ -172,42 +144,25 @@ public class SQLPlusMojo extends AbstractDBMojo {
 
 	}
 
-	CommandLine buildCommandline(File file)
-			throws MojoExecutionException, MojoFailureException {
-		checkFileIsReadable(file);
-
-		CommandLine commandLine = new CommandLine(sqlplus);
-		// logon only once, without this sql*plus would prompt for
-		// credentials if given ones are not correct
-		commandLine.addArgument("-L");
-		StringTokenizer stringTokenizer = new StringTokenizer(getConnectionIdentifier());
-		while (stringTokenizer.hasMoreTokens()) {
-			commandLine.addArgument(stringTokenizer.nextToken());
+	private static Map<Object, Object> copySystemEnvVars() throws MojoExecutionException {
+		try {
+			return new HashMap<>(CommandLineUtils.getSystemEnvVars());
+		} catch (IOException e) {
+			throw new MojoExecutionException("Could not copy system environment variables.", e);
 		}
-		commandLine.addArgument("@" + file.getName());
-		if (arguments != null) {
-			for (Object argument : arguments) {
-				if (argument == null) {
-					throw new MojoExecutionException("Misconfigured argument, value is null. "
-						+ "Set the argument to an empty value if this is the required behaviour.");
-				} else {
-					commandLine.addArgument(argument.toString());
-				}
-			}
-		}
-		
-		getLog().info(
-				"Executing command line: "
-						+ obfuscateCredentials(commandLine.toString(),
-								getCredentials()));
-
-		return commandLine;
 	}
 
-	private void checkFileIsReadable(File file) throws MojoFailureException {
-		if (!file.exists() || !file.canRead() || !file.isFile()) {
-			throw new MojoFailureException(file.getName() + "problem reading file '" + file.getAbsolutePath() + "'");
+	private static File printToTempFile(String data) throws MojoExecutionException {
+		File tmpSqlFile;
+		try {
+			tmpSqlFile = File.createTempFile("statement-", ".sql");
+			try (OutputStreamWriter p = new OutputStreamWriter(new FileOutputStream(tmpSqlFile), UTF_8)) {
+				p.write(data);
+			}
+		} catch (IOException e) {
+			throw new MojoExecutionException("Could not write sql statements to file", e);
 		}
+		return tmpSqlFile;
 	}
 
 }

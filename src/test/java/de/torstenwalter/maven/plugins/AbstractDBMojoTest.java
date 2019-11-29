@@ -168,12 +168,14 @@ public class AbstractDBMojoTest {
 
     @Test
     public void testObfuscateCredentials() {
-        String text = "Test " + USERNAME + " " + PASSWORD;
         DBMojo mojo = new DBMojo();
+        String text = "Test " + USERNAME + " " + PASSWORD;
+        CommandLine cmd = new CommandLine(EXECUTABLE);
+        cmd.addArgument(text);
 
-        String result = mojo.obfuscateCredentials(text, CREDENTIALS);
+        String result = mojo.obfuscateCredentials(cmd, CREDENTIALS);
 
-        Assert.assertEquals("Test <username> <password>", result);
+        Assert.assertEquals("[exe, \"Test <username> <password>\"]", result);
     }
 
     private Server createServerObject() {

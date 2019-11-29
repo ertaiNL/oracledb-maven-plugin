@@ -23,12 +23,16 @@ Usage
                <version>1.1</version>
                <executions>
                   <execution>
-                     ...
+                     <id>run-update</id>
+                     <phase>process-sources</phase>
                      <goals>
                         <goal>sqlplus</goal>
                      </goals>
                      <configuration>
                         <sqlFile>run-update.sql</sqlFile>
+                        <arguments>
+                            <argument>example</argument>
+                        </arguments>
                      </configuration>
                   </execution>
                   <execution>
@@ -51,6 +55,7 @@ Usage
                   <password>secret</password>
                   <hostname>localhost</hostname>
                   <port>1521</port>
+                </configuration>
             </plugin>
          </plugins>
       </build>

@@ -16,6 +16,7 @@
 
 package de.torstenwalter.maven.plugins;
 
+import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.LogOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
@@ -93,7 +94,7 @@ abstract class AbstractDBMojo extends AbstractMojo {
 	 * identifier. Possible values: SYSOPER and SYSDBA. Other values are
 	 * ignored.
 	 *
-	 * @parameter default-value=""
+	 * @parameter
 	 */
 	String asClause;
 
@@ -175,10 +176,9 @@ abstract class AbstractDBMojo extends AbstractMojo {
 		return getConnectionIdentifier(getCredentials());
 	}
 
-	String obfuscateCredentials(String string, Credentials credentials) {
-		return StringUtils.replaceOnce(StringUtils.replaceOnce(string,
-				credentials.getUsername(), "<username>"), credentials
-				.getPassword(), "<password>");
+	String obfuscateCredentials(CommandLine cmd, Credentials credentials) {
+		String replaced = StringUtils.replaceOnce(cmd.toString(), credentials.getUsername(), "<username>");
+		return StringUtils.replaceOnce(replaced, credentials.getPassword(), "<password>");
 	}
 
 	class ErrorLogOutputStream extends LogOutputStream {

@@ -28,8 +28,9 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 	/**
 	 * Enables you to filter what is loaded during the import operation.
 	 * options: [ALL | DATA_ONLY | METADATA_ONLY]
+	 * oracle-default: ALL
 	 *
-	 * @parameter default-value="ALL"
+	 * @parameter
 	 */
 	String content;
 
@@ -76,8 +77,9 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 	 * out the elapsed time between different phases of a Data Pump operation. Such information can be helpful in
 	 * diagnosing performance problems and estimating the timing of future similar operations.
 	 * options: [NONE | STATUS | LOGFILE | ALL]
+	 * oracle-default: NONE
 	 *
-	 * @parameter default-value="NONE"
+	 * @parameter
 	 */
 	String logtime;
 
@@ -113,7 +115,7 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 		Executor exec = new DefaultExecutor();
 		exec.setStreamHandler(new PumpStreamHandler(new InfoLogOutputStream(), new ErrorLogOutputStream()));
 
-		getLog().debug("Executing command line: " + obfuscateCredentials(commandLine.toString(), getCredentials()));
+		getLog().debug("Executing command line: " + obfuscateCredentials(commandLine, getCredentials()));
 		try {
 			exec.execute(commandLine);
 		} catch (ExecuteException e) {

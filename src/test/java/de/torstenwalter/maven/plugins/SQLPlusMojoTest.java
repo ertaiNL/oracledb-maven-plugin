@@ -16,19 +16,16 @@
 
 package de.torstenwalter.maven.plugins;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
 import org.apache.commons.exec.CommandLine;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
 public class SQLPlusMojoTest {
@@ -81,7 +78,7 @@ public class SQLPlusMojoTest {
         Assert.assertNull(vars);
     }
 
-    @Ignore("MavenProject object hard to recreate")
+    @Test
     public void testGetEnvVarsBeforeSql() throws MojoExecutionException {
         SQLPlusMojo mojo = createBasicMojo();
         mojo.beforeSql = DATA;
