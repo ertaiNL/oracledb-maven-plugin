@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.torstenwalter.maven.plugins;
+package nl.ertai.maven.plugins;
 
 import org.apache.commons.exec.*;
 import org.apache.commons.lang3.StringUtils;

@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package de.torstenwalter.maven.plugins;
+package nl.ertai.maven.plugins;
 
+import nl.ertai.maven.plugins.AbstractDBMojo;
+import nl.ertai.maven.plugins.Credentials;
 import org.apache.commons.exec.CommandLine;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;

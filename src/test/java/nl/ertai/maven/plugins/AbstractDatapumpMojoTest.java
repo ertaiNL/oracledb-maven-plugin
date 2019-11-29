@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package de.torstenwalter.maven.plugins;
+package nl.ertai.maven.plugins;
 
+import nl.ertai.maven.plugins.AbstractDatapumpMojo;
 import org.apache.commons.exec.CommandLine;
 import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Assert;

@@ -7,7 +7,7 @@ Installation
 ------------
 1. Download jar file and pom for the latest version.
 2. Install plugin in your local maven repository
-   `mvn install:install-file -Dfile=oracledb-maven-plugin-1.1.jar -DpomFile=oracledb-maven-plugin-1.1.pom`
+   `mvn install:install-file -Dfile=oracledb-maven-plugin-1.2.jar -DpomFile=oracledb-maven-plugin-1.2.pom`
 
 
 Usage
@@ -18,9 +18,9 @@ Usage
       <build>
          <plugins>
             <plugin>
-               <groupId>de.torstenwalter.maven.plugins</groupId>
+               <groupId>nl.ertai.maven.plugins</groupId>
                <artifactId>oracledb-maven-plugin</artifactId>
-               <version>1.1</version>
+               <version>1.2</version>
                <executions>
                   <execution>
                      <id>run-update</id>
@@ -67,4 +67,4 @@ Help
 ----
 
 You can use the maven-help-plugin to get more information about all possible parameters like this:
-   `mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:describe -Dplugin=de.torstenwalter.maven.plugins:oracledb-maven-plugin:1.1 -Ddetail`
+   `mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:describe -Dplugin=nl.ertai.maven.plugins:oracledb-maven-plugin:1.2 -Ddetail`

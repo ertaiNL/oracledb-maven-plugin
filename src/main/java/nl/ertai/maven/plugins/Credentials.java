@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.torstenwalter.maven.plugins;
+package nl.ertai.maven.plugins;
 
 class Credentials {
 	private String username;

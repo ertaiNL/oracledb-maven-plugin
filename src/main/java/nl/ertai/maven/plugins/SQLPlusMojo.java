@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.torstenwalter.maven.plugins;
+package nl.ertai.maven.plugins;
 
 import java.io.*;
 import java.util.HashMap;

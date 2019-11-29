@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package de.torstenwalter.maven.plugins;
+package nl.ertai.maven.plugins;
 
+import nl.ertai.maven.plugins.ExpdpMojo;
 import org.apache.commons.exec.CommandLine;
 import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ImpdpMojoTest {
+public class ExpdpMojoTest {
 
-    private static final String EXECUTABLE = "impdp";
+    private static final String EXECUTABLE = "expdp";
     private static final String USERNAME = "username";
     private static final String HOSTNAME = "localhost";
     private static final Integer PORT = 443;
@@ -35,7 +36,7 @@ public class ImpdpMojoTest {
 
     @Test
     public void testBuildCommandlineExecutable() throws MojoFailureException {
-        ImpdpMojo mojo = createBasicMojo();
+        ExpdpMojo mojo = createBasicMojo();
         CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals(EXECUTABLE, cmd.getExecutable());
@@ -43,47 +44,38 @@ public class ImpdpMojoTest {
 
     @Test
     public void testBuildCommandlineConnectionString() throws MojoFailureException {
-        ImpdpMojo mojo = createBasicMojo();
+        ExpdpMojo mojo = createBasicMojo();
         CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals(CONNECTION_STRING, cmd.getArguments()[0]);
     }
 
     @Test
-    public void testBuildCommandlineRemapTablespace() throws MojoFailureException {
-        ImpdpMojo mojo = createBasicMojo();
-        mojo.remap_tablespace = DATA;
+    public void testBuildCommandlineCompression() throws MojoFailureException {
+        ExpdpMojo mojo = createBasicMojo();
+        mojo.compression = DATA;
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("REMAP_TABLESPACE=" + DATA, cmd.getArguments()[1]);
+        Assert.assertEquals("COMPRESSION=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
-    public void testBuildCommandlineRemapSchema() throws MojoFailureException {
-        ImpdpMojo mojo = createBasicMojo();
-        mojo.remap_schema = DATA;
+    public void testBuildCommandlineReuseDumpFiles() throws MojoFailureException {
+        ExpdpMojo mojo = createBasicMojo();
+        mojo.reuse_dump_files = true;
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("REMAP_SCHEMA=" + DATA, cmd.getArguments()[1]);
+        Assert.assertEquals("REUSE_DUMPFILES=YES", cmd.getArguments()[1]);
     }
 
-    @Test
-    public void testBuildCommandlineTableExistsAction() throws MojoFailureException {
-        ImpdpMojo mojo = createBasicMojo();
-        mojo.table_exists_action = DATA;
-        CommandLine cmd = mojo.buildCommandline();
-
-        Assert.assertEquals("TABLE_EXISTS_ACTION=" + DATA, cmd.getArguments()[1]);
-    }
-
-    private ImpdpMojo createBasicMojo() {
-        ImpdpMojo mojo = new ImpdpMojo();
+    private ExpdpMojo createBasicMojo() {
+        ExpdpMojo mojo = new ExpdpMojo();
         mojo.useEasyConnect = Boolean.TRUE;
         mojo.username = USERNAME;
         mojo.hostname = HOSTNAME;
         mojo.port = PORT;
         mojo.serviceName = SERVICE_NAME;
-        mojo.impdp = EXECUTABLE;
+        mojo.expdp = EXECUTABLE;
         return mojo;
     }
 }
