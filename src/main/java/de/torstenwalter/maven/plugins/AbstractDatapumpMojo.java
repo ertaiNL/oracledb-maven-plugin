@@ -111,7 +111,7 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 		CommandLine commandLine = buildCommandline();
 
 		Executor exec = new DefaultExecutor();
-		exec.setStreamHandler(new PumpStreamHandler(System.out, System.err));
+		exec.setStreamHandler(new PumpStreamHandler(new InfoLogOutputStream(), new ErrorLogOutputStream()));
 
 		getLog().debug("Executing command line: " + obfuscateCredentials(commandLine.toString(), getCredentials()));
 		try {
@@ -146,5 +146,7 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 			commandLine.addArgument(argumentName + "=" + argumentValue);
 		}
 	}
+
+
 
 }

@@ -16,6 +16,7 @@
 
 package de.torstenwalter.maven.plugins;
 
+import org.apache.commons.exec.LogOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
@@ -179,5 +180,20 @@ abstract class AbstractDBMojo extends AbstractMojo {
 				credentials.getUsername(), "<username>"), credentials
 				.getPassword(), "<password>");
 	}
+
+	class ErrorLogOutputStream extends LogOutputStream {
+		@Override
+		protected void processLine(String s, int i) {
+			getLog().error(s);
+		}
+	}
+
+	class InfoLogOutputStream extends LogOutputStream {
+		@Override
+		protected void processLine(String s, int i) {
+			getLog().info(s);
+		}
+	}
+
 
 }
