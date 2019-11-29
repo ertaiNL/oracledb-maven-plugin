@@ -24,6 +24,9 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
 
+/**
+ * @see http://docs.oracle.com/cd/B19306_01/server.102/b14357/toc.htm (SQL*Plus User's Guide and Reference)
+ */
 abstract class AbstractDBMojo extends AbstractMojo {
 
 	/**
@@ -126,59 +129,54 @@ abstract class AbstractDBMojo extends AbstractMojo {
 		}
 	}
 
-	/**
-	 * @see http://docs.oracle.com/cd/B19306_01/server.102/b14357/toc.htm
-	 *      (SQL*Plus User's Guide and Reference)
-	 * 
-	 * @param credentials
-	 * @return
-	 */
-	private String getConnectionIdentifier(Credentials credentials) {
-		StringBuilder connectionIdentifier = new StringBuilder();
-		// fist add the username
-		connectionIdentifier.append(credentials.getUsername());
-		// then add the password if given
-		if (!StringUtils.isEmpty(credentials.getPassword())) {
-			connectionIdentifier.append("/").append(credentials.getPassword());
-		}
-
-		// now add the connect_identifier:
-		if (!useEasyConnect) {
-    		// To make it more robust and to not to rely on TNSNAMES we specify the
-    		// full connect identifier like:
-    		// (DESCRIPTION=
-    		// (ADDRESS=(PROTOCOL=tcp)(HOST=host)(PORT=port) )
-    		// (CONNECT_DATA=
-    		// (SERVICE_NAME=service_name) ) )
-    		connectionIdentifier
-    				.append("@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=tcp)(HOST=")
-    				.append(hostname).append(")(PORT=").append(port)
-    				.append(")))(CONNECT_DATA=(SERVICE_NAME=").append(serviceName).append(")");
-    				if (!StringUtils.isEmpty(instanceName)){
-    					connectionIdentifier.append("(INSTANCE_NAME=").append(instanceName).append(")");
-    				}
-    					connectionIdentifier.append("))");
-		} else {
-		    // "[//]Host[:Port]/<service_name>"
-            connectionIdentifier.append("@//").append(hostname).append(":").append(port).append("/").append(serviceName);
-		}
-		// add as clause if necessary
-		if (StringUtils.equalsIgnoreCase(asClause, "SYSDBA")
-				|| StringUtils.equalsIgnoreCase(asClause, "SYSOPER")) {
-			connectionIdentifier.append(" AS ").append(
-					StringUtils.upperCase(asClause));
-		}
-
-		return connectionIdentifier.toString();
-	}
-
-	String getConnectionIdentifier() throws MojoFailureException {
-		return getConnectionIdentifier(getCredentials());
-	}
-
 	String obfuscateCredentials(CommandLine cmd, Credentials credentials) {
 		String replaced = StringUtils.replaceOnce(cmd.toString(), credentials.getUsername(), "<username>");
 		return StringUtils.replaceOnce(replaced, credentials.getPassword(), "<password>");
+	}
+
+	String getConnectionIdentifier() throws MojoFailureException {
+		StringBuilder connectionId = new StringBuilder();
+		getUsernameAndPasswordForConnectionId(connectionId, getCredentials());
+		if (!useEasyConnect) {
+			getConnectionIdentifier(connectionId);
+		} else {
+			getConnectionIdentifierEasyConnect(connectionId);
+		}
+		getConnectionIdentifierAsClause(connectionId);
+		return connectionId.toString();
+	}
+
+	private static void getUsernameAndPasswordForConnectionId(StringBuilder connectionId, Credentials credentials) {
+		// <username>/<password>
+		connectionId.append(credentials.getUsername());
+		if (!StringUtils.isEmpty(credentials.getPassword())) {
+			connectionId.append("/").append(credentials.getPassword());
+		}
+	}
+
+	private void getConnectionIdentifier(StringBuilder connectionId) {
+  		// To make it more robust and to not to rely on TNSNAMES we specify the full connect identifier like:
+   		// (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=<host>)(PORT=<port>))(CONNECT_DATA=(SERVICE_NAME=<serviceName>)))
+		connectionId.append("@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=tcp)");
+		connectionId.append("(HOST=").append(hostname).append(")(PORT=").append(port).append(")))");
+		connectionId.append("(CONNECT_DATA=(SERVICE_NAME=").append(serviceName).append(")");
+		if (!StringUtils.isEmpty(instanceName)) {
+			// (INSTANCE_NAME=<instanceName>)
+			connectionId.append("(INSTANCE_NAME=").append(instanceName).append(")");
+		}
+		connectionId.append("))");
+	}
+
+	private void getConnectionIdentifierEasyConnect(StringBuilder connectionId) {
+		// @//<host>>:<port>/<serviceName>
+		connectionId.append("@//").append(hostname).append(":").append(port).append("/").append(serviceName);
+	}
+
+	private void getConnectionIdentifierAsClause(StringBuilder connectionId) {
+		// AS <asClause>
+		if (StringUtils.equalsIgnoreCase(asClause, "SYSDBA") || StringUtils.equalsIgnoreCase(asClause, "SYSOPER")) {
+			connectionId.append(" AS ").append(StringUtils.upperCase(asClause));
+		}
 	}
 
 	class ErrorLogOutputStream extends LogOutputStream {
