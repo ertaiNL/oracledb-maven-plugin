@@ -55,7 +55,7 @@ public class ImpdpMojoTest {
         mojo.remap_tablespace = DATA;
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("REMAP_TABLESPACE=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("REMAP_TABLESPACE=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class ImpdpMojoTest {
         mojo.remap_schema = DATA;
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("REMAP_SCHEMA=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("REMAP_SCHEMA=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ImpdpMojoTest {
         mojo.table_exists_action = DATA;
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("TABLE_EXISTS_ACTION=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("TABLE_EXISTS_ACTION=" + DATA, cmd.getArguments()[1]);
     }
 
     private ImpdpMojo createBasicMojo() {

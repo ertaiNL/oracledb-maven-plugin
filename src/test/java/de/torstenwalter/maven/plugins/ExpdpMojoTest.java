@@ -55,7 +55,7 @@ public class ExpdpMojoTest {
         mojo.compression = DATA;
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("COMPRESSION=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("COMPRESSION=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class ExpdpMojoTest {
         mojo.reuse_dump_files = true;
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("REUSE_DUMPFILES=YES", cmd.getArguments()[2]);
+        Assert.assertEquals("REUSE_DUMPFILES=YES", cmd.getArguments()[1]);
     }
 
     private ExpdpMojo createBasicMojo() {

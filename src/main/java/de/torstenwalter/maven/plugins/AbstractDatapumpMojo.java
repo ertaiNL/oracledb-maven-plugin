@@ -38,7 +38,6 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 	 * log and SQL files.
 	 *
 	 * @parameter
-	 * @required
 	 */
 	String directory;
 
@@ -134,7 +133,9 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 			commandLine.addArgument("CONTENT=" + content);
 		}
 
-		commandLine.addArgument("DIRECTORY=" + directory);
+		if (StringUtils.isNotEmpty(directory)) {
+			commandLine.addArgument("DIRECTORY=" + directory);
+		}
 
 		if (StringUtils.isNotEmpty(dumpfile)) {
 			commandLine.addArgument("DUMPFILE=" + dumpfile);

@@ -68,7 +68,7 @@ public class AbstractDatapumpMojoTest {
 
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("DUMPFILE=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("DUMPFILE=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
@@ -78,7 +78,7 @@ public class AbstractDatapumpMojoTest {
 
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("EXCLUDE=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("EXCLUDE=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class AbstractDatapumpMojoTest {
 
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("INCLUDE=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("INCLUDE=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class AbstractDatapumpMojoTest {
 
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("LOGFILE=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("LOGFILE=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
@@ -108,7 +108,7 @@ public class AbstractDatapumpMojoTest {
 
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("LOGTIME=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("LOGTIME=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
@@ -118,7 +118,7 @@ public class AbstractDatapumpMojoTest {
 
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("NETWORK_LINK=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("NETWORK_LINK=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class AbstractDatapumpMojoTest {
 
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("SCHEMAS=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("SCHEMAS=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class AbstractDatapumpMojoTest {
 
         CommandLine cmd = mojo.buildCommandline();
 
-        Assert.assertEquals("TABLES=" + DATA, cmd.getArguments()[2]);
+        Assert.assertEquals("TABLES=" + DATA, cmd.getArguments()[1]);
     }
 
     @Test
