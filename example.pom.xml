@@ -1,0 +1,75 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>nl.ertai.maven.plugins</groupId>
+    <artifactId>oracledb-maven-plugin-test</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>ertaiNL</id>
+            <name>Rob Snelders</name>
+            <email>programming@ertai.nl</email>
+            <url>http://ertai.nl</url>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>de.torstenwalter.maven.plugins</groupId>
+                <artifactId>oracledb-maven-plugin</artifactId>
+                <version>1.2-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>my-execution</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>sqlplus</goal>
+                        </goals>
+                        <configuration>
+                            <sqlFile>run-update.sql</sqlFile>
+                            <arguments>
+                                <argument>test</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>import-db</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>impdp</goal>
+                        </goals>
+                        <configuration>
+                            <schemas>MYSCHEMA</schemas>
+                            <directory>DUMPDIR</directory>
+                            <dumpfile>database.dmp</dumpfile>
+                            <logfile>import.log</logfile>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <serviceName>DEVELOPMENT</serviceName>
+                    <username>user</username>
+                    <password>secret</password>
+                    <hostname>localhost</hostname>
+                    <port>1521</port>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
