@@ -17,7 +17,6 @@
 package de.torstenwalter.maven.plugins;
 
 import org.apache.commons.exec.CommandLine;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
@@ -60,17 +59,9 @@ public class ImpdpMojo extends AbstractDatapumpMojo {
 		CommandLine commandLine = new CommandLine(impdp);
 		addCommonArguments(commandLine);
 
-		if (StringUtils.isNotEmpty(remap_tablespace)) {
-			commandLine.addArgument("REMAP_TABLESPACE=" + remap_tablespace);
-		}
-
-		if (StringUtils.isNotEmpty(remap_schema)) {
-			commandLine.addArgument("REMAP_SCHEMA=" + remap_schema);
-		}
-
-		if (StringUtils.isNotEmpty(table_exists_action)) {
-			commandLine.addArgument("TABLE_EXISTS_ACTION=" + table_exists_action);
-		}
+		addStringArgument(commandLine, "REMAP_TABLESPACE", remap_tablespace);
+		addStringArgument(commandLine, "REMAP_SCHEMA", remap_schema);
+		addStringArgument(commandLine, "TABLE_EXISTS_ACTION", table_exists_action);
 
 		return commandLine;
 	}

@@ -17,7 +17,6 @@
 package de.torstenwalter.maven.plugins;
 
 import org.apache.commons.exec.CommandLine;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
@@ -53,9 +52,7 @@ public class ExpdpMojo extends AbstractDatapumpMojo {
 		CommandLine commandLine = new CommandLine(expdp);
 		addCommonArguments(commandLine);
 
-		if (StringUtils.isNotEmpty(compression)) {
-			commandLine.addArgument("COMPRESSION=" + compression);
-		}
+		addStringArgument(commandLine, "COMPRESSION", compression);
 
 		if (reuse_dump_files) {
 			commandLine.addArgument("REUSE_DUMPFILES=YES");

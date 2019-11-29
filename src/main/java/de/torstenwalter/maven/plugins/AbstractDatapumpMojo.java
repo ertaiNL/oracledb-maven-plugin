@@ -129,44 +129,21 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 			throws MojoFailureException {
 		commandLine.addArgument("'" + getConnectionIdentifier() + "'", false);
 
-		if (StringUtils.isNotEmpty(content)) {
-			commandLine.addArgument("CONTENT=" + content);
-		}
+		addStringArgument(commandLine, "CONTENT", content);
+		addStringArgument(commandLine, "DIRECTORY", directory);
+		addStringArgument(commandLine, "DUMPFILE", dumpfile);
+		addStringArgument(commandLine, "EXCLUDE", exclude);
+		addStringArgument(commandLine, "INCLUDE", include);
+		addStringArgument(commandLine, "LOGFILE", logfile);
+		addStringArgument(commandLine, "LOGTIME", logtime);
+		addStringArgument(commandLine, "NETWORK_LINK", network_link);
+		addStringArgument(commandLine, "SCHEMAS", schemas);
+		addStringArgument(commandLine, "TABLES", tables);
+	}
 
-		if (StringUtils.isNotEmpty(directory)) {
-			commandLine.addArgument("DIRECTORY=" + directory);
-		}
-
-		if (StringUtils.isNotEmpty(dumpfile)) {
-			commandLine.addArgument("DUMPFILE=" + dumpfile);
-		}
-
-		if (StringUtils.isNotEmpty(exclude)) {
-			commandLine.addArgument("EXCLUDE=" + exclude);
-		}
-
-		if (StringUtils.isNotEmpty(include)) {
-			commandLine.addArgument("INCLUDE=" + include);
-		}
-
-		if (StringUtils.isNotEmpty(logfile)) {
-			commandLine.addArgument("LOGFILE=" + logfile);
-		}
-
-		if (StringUtils.isNotEmpty(logtime)) {
-			commandLine.addArgument("LOGTIME=" + logtime);
-		}
-
-		if (StringUtils.isNotEmpty(network_link)) {
-			commandLine.addArgument("NETWORK_LINK=" + network_link);
-		}
-
-		if (StringUtils.isNotEmpty(schemas)) {
-			commandLine.addArgument("SCHEMAS=" + schemas);
-		}
-
-		if (StringUtils.isNotEmpty(tables)) {
-			commandLine.addArgument("TABLES=" + tables);
+	void addStringArgument(CommandLine commandLine, String argumentName, String argumentValue) {
+		if (StringUtils.isNotEmpty(argumentValue)) {
+			commandLine.addArgument(argumentName + "=" + argumentValue);
 		}
 	}
 
