@@ -119,7 +119,11 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 		try {
 			exec.execute(commandLine);
 		} catch (ExecuteException e) {
-			throw new MojoExecutionException("program exited with exitCode: " + e.getExitValue(), e);
+			if (failOnError) {
+				throw new MojoExecutionException("program exited with exitCode: " + e.getExitValue(), e);
+			} else {
+				getLog().warn("program exited with exitCode: " + e.getExitValue());
+			}
 		} catch (IOException e) {
 			throw new MojoExecutionException("Command execution failed.", e);
 		}

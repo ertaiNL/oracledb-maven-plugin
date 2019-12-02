@@ -110,6 +110,14 @@ abstract class AbstractDBMojo extends AbstractMojo {
 	 */
 	boolean useEasyConnect;
 
+	/**
+	 * Should the plugin result in a failure when there is a application error?
+	 * options: [true | false]
+	 *
+	 * @parameter default-value="false"
+	 */
+	boolean failOnError;
+
 	AbstractDBMojo() {
 		super();
 	}

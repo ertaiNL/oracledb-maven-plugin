@@ -93,7 +93,11 @@ public class SQLPlusMojo extends AbstractDBMojo {
 			try {
 				exec.execute(cmd, getEnvVars());
 			} catch (ExecuteException e) {
-				throw new MojoExecutionException("program exited with exitCode: " + e.getExitValue(), e);
+				if (failOnError) {
+					throw new MojoExecutionException("program exited with exitCode: " + e.getExitValue(), e);
+				} else {
+					getLog().warn("program exited with exitCode: " + e.getExitValue());
+				}
 			} catch (IOException e) {
 				throw new MojoExecutionException("Command execution failed.", e);
 			}
