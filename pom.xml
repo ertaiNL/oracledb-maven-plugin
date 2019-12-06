@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.ertai.maven.plugins</groupId>
 	<artifactId>oracledb-maven-plugin</artifactId>
-	<version>1.2</version>
+	<version>1.3-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 	<name>oracledb-maven-plugin</name>
 	<description>A wrapper around oracle database tools like sqlplus, impdp and expdp to make them available as maven goals.</description>
