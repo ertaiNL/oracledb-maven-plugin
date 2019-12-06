@@ -89,7 +89,7 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 	 *
 	 * @parameter
 	 */
-	String network_link;
+	String networkLink;
 
 	/**
 	 * Specifies that a schema-mode import is to be performed.
@@ -142,7 +142,7 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 		addStringArgument(commandLine, "INCLUDE", include);
 		addStringArgument(commandLine, "LOGFILE", logfile);
 		addStringArgument(commandLine, "LOGTIME", logtime);
-		addStringArgument(commandLine, "NETWORK_LINK", network_link);
+		addStringArgument(commandLine, "NETWORK_LINK", networkLink);
 		addStringArgument(commandLine, "SCHEMAS", schemas);
 		addStringArgument(commandLine, "TABLES", tables);
 	}

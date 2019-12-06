@@ -115,7 +115,7 @@ public class AbstractDatapumpMojoTest {
     @Test
     public void testAddCommonArgumentsNetworkLink() throws MojoFailureException {
         DatapumpMojo mojo = createBasicMojo();
-        mojo.network_link = DATA;
+        mojo.networkLink = DATA;
 
         CommandLine cmd = mojo.buildCommandline();
 
@@ -152,7 +152,7 @@ public class AbstractDatapumpMojoTest {
         mojo.include = DATA;
         mojo.logfile = DATA;
         mojo.logtime = DATA;
-        mojo.network_link = DATA;
+        mojo.networkLink = DATA;
         mojo.schemas = DATA;
         mojo.tables = DATA;
 

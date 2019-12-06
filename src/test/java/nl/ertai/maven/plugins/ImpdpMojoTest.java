@@ -16,7 +16,6 @@
 
 package nl.ertai.maven.plugins;
 
-import nl.ertai.maven.plugins.ImpdpMojo;
 import org.apache.commons.exec.CommandLine;
 import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Assert;
@@ -53,7 +52,7 @@ public class ImpdpMojoTest {
     @Test
     public void testBuildCommandlineRemapTablespace() throws MojoFailureException {
         ImpdpMojo mojo = createBasicMojo();
-        mojo.remap_tablespace = DATA;
+        mojo.remapTablespace = DATA;
         CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("REMAP_TABLESPACE=" + DATA, cmd.getArguments()[1]);
@@ -62,7 +61,7 @@ public class ImpdpMojoTest {
     @Test
     public void testBuildCommandlineRemapSchema() throws MojoFailureException {
         ImpdpMojo mojo = createBasicMojo();
-        mojo.remap_schema = DATA;
+        mojo.remapSchema = DATA;
         CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("REMAP_SCHEMA=" + DATA, cmd.getArguments()[1]);
@@ -71,7 +70,7 @@ public class ImpdpMojoTest {
     @Test
     public void testBuildCommandlineTableExistsAction() throws MojoFailureException {
         ImpdpMojo mojo = createBasicMojo();
-        mojo.table_exists_action = DATA;
+        mojo.tableExistsAction = DATA;
         CommandLine cmd = mojo.buildCommandline();
 
         Assert.assertEquals("TABLE_EXISTS_ACTION=" + DATA, cmd.getArguments()[1]);

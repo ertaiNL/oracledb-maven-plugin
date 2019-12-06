@@ -37,14 +37,14 @@ public class ImpdpMojo extends AbstractDatapumpMojo {
 	 *
 	 * @parameter
 	 */
-	String remap_tablespace;
+	String remapTablespace;
 
 	/**
 	 * Loads all objects from the source schema into a target schema.
 	 *
 	 * @parameter
 	 */
-	String remap_schema;
+	String remapSchema;
 
 	/**
 	 * Tells Import what to do if the table it is trying to create already exists.
@@ -53,16 +53,16 @@ public class ImpdpMojo extends AbstractDatapumpMojo {
 	 *
 	 * @parameter
 	 */
-	String table_exists_action;
+	String tableExistsAction;
 
 	@Override
 	CommandLine buildCommandline() throws MojoFailureException {
 		CommandLine commandLine = new CommandLine(impdp);
 		addCommonArguments(commandLine);
 
-		addStringArgument(commandLine, "REMAP_TABLESPACE", remap_tablespace);
-		addStringArgument(commandLine, "REMAP_SCHEMA", remap_schema);
-		addStringArgument(commandLine, "TABLE_EXISTS_ACTION", table_exists_action);
+		addStringArgument(commandLine, "REMAP_TABLESPACE", remapTablespace);
+		addStringArgument(commandLine, "REMAP_SCHEMA", remapSchema);
+		addStringArgument(commandLine, "TABLE_EXISTS_ACTION", tableExistsAction);
 
 		return commandLine;
 	}

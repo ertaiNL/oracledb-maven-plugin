@@ -47,7 +47,7 @@ public class ExpdpMojo extends AbstractDatapumpMojo {
 	 *
 	 * @parameter
 	 */
-	boolean reuse_dump_files;
+	boolean reuseDumpFiles;
 
 	@Override
 	CommandLine buildCommandline() throws MojoFailureException {
@@ -55,7 +55,7 @@ public class ExpdpMojo extends AbstractDatapumpMojo {
 		addCommonArguments(commandLine);
 
 		addStringArgument(commandLine, "COMPRESSION", compression);
-		addBooleanArgument(commandLine, "REUSE_DUMPFILES", reuse_dump_files);
+		addBooleanArgument(commandLine, "REUSE_DUMPFILES", reuseDumpFiles);
 		return commandLine;
 	}
 
