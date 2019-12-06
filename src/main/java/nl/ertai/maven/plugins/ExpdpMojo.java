@@ -55,11 +55,7 @@ public class ExpdpMojo extends AbstractDatapumpMojo {
 		addCommonArguments(commandLine);
 
 		addStringArgument(commandLine, "COMPRESSION", compression);
-
-		if (reuse_dump_files) {
-			commandLine.addArgument("REUSE_DUMPFILES=YES");
-		}
-
+		addBooleanArgument(commandLine, "REUSE_DUMPFILES", reuse_dump_files);
 		return commandLine;
 	}
 

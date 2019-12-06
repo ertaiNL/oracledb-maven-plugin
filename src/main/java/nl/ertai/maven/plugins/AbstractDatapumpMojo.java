@@ -153,6 +153,10 @@ abstract class AbstractDatapumpMojo extends AbstractDBMojo {
 		}
 	}
 
-
+	void addBooleanArgument(CommandLine commandLine, String argumentName, boolean argumentValue) {
+		if (argumentValue) {
+			commandLine.addArgument(argumentName + "=YES");
+		}
+	}
 
 }
